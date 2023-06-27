@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<!-- contenido del head -->
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="Autor" content="Kenneth Ruiz">
+        <meta name="Lenguajes" content="html, css3, js, vue">
+        <meta name="" content="">
+        
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/main.css') }}">
+        <!-- Icono de la pestaña del navegador -->
+        <link rel="shortcut icon" href="{{url_for('static', filename='img/favicon.ico')}}">
+        <link href="webfonts/css/all.css" rel="stylesheet">
+        <!-- <link href="./static/feather" rel="stylesheet">  -->
+             
+    {%if vtitulo%}
+        <title> Flask - {{vtitulo}} </title>
+    {%else%}
+        <!-- Este titulo es por default -->
+        <title>Titulo si no lo encuentra</title> 
+    {%endif%}
+    </head>
+<!-- contenido del head final-->
+
+<body>
+
+   
+<!---Official and not clone --->
+<div class="navigation">
+   <!-- <div class="logo">
+      <a class="no-underline" href="#">
+      Mi App
+      </a>
+   </div> -->
+   <div class="navigation-search-container">
+      <i class="fa fa-search"></i>
+      <input class="search-field" type="text" placeholder="Buscar">
+      <div class="search-container">
+         <div class="search-container-box">
+            <div class="search-results">
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="navigation-icons">
+      
+
+    <a href="{{url_for('login')}}" class="navigation-link">
+    <!-- Este contenido son los íconos svg que están es static/feather y los estilos están en navbar.css -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      
+      Ingresar
+    </a>
+     
+    <a href="{{url_for('registro')}}" class="navigation-link">
+    <!-- Este contenido son los íconos svg que están es static/feather y los estilos están en navbar.css   -->
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user-plus"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+      
+      Registrarse
+    </a>
+   </div>
+</div>
+<!---Official and not clone --->
+
+
+
+
+ <div class="container">
+        <!-- Estos son mensajes flashed que vienen desde main.py -->
+        <h1>                  
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {%if messages %}
+                {%for category, message in messages%}
+                    <div class="alert alert-{{ category }}">
+                        <h4>
+                            {{ message }}
+                        </h4>
+                    </div>  
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        </h1> 
+    </div>  
+
+
+<!-- CONTENIDO DE HERENCIA -->
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
+
+
+
+
+
+
+    
+<!-- boton de refresh trabaja con refresh.css no borrar -->
+    <div class="container">
+        <a id="refresh_btn" value="Refresh" onClick="history.go()">
+            <svg class="refreshicon"   version="1.1" id="Capa_1"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                width="25px" height="25px" viewBox="0 0 322.447 322.447" style="enable-background:new 0 0 322.447 322.447;"
+                xml:space="preserve">
+                <path  d="M321.832,230.327c-2.133-6.565-9.184-10.154-15.75-8.025l-16.254,5.281C299.785,206.991,305,184.347,305,161.224
+                c0-84.089-68.41-152.5-152.5-152.5C68.411,8.724,0,77.135,0,161.224s68.411,152.5,152.5,152.5c6.903,0,12.5-5.597,12.5-12.5
+                c0-6.902-5.597-12.5-12.5-12.5c-70.304,0-127.5-57.195-127.5-127.5c0-70.304,57.196-127.5,127.5-127.5
+                c70.305,0,127.5,57.196,127.5,127.5c0,19.372-4.371,38.337-12.723,55.568l-5.553-17.096c-2.133-6.564-9.186-10.156-15.75-8.025
+                c-6.566,2.134-10.16,9.186-8.027,15.751l14.74,45.368c1.715,5.283,6.615,8.642,11.885,8.642c1.279,0,2.582-0.198,3.865-0.614
+                l45.369-14.738C320.371,243.946,323.965,236.895,321.832,230.327z"/>
+            </svg>
+          </a>
+    </div>
+    <!-- boton de refresh trabaja con refresh.css no borrar final de script -->
+
+<!-- js scripts no borrar     -->
+    <script src="{{ url_for('static', filename='js/popper.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    
+      
+
+<!--Scroll arriba -->
+    <a href="#0" class="cd-top">Top</a>
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+    <script src="{{ url_for('static', filename='js/jquery1110.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/main.js')}}"></script>
+    <!--Fin scroll arriba -->
+
+<!-- script Reloj & script animate.js  -->
+    <script src="{{ url_for('static', filename='js/reloj.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/Animate.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/show_pass.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/hide_pass.js')}}"></script>
+    <script src="{{ url_for('static', filename='js/all.js')}}"></script>
+    <!-- <script src="{{ url_for('static', filename='js/login.js')}}"></script> -->
+
+    <script src="{{ url_for('static', filename='js/abc.js')}}"></script> 
+    <!-- js scripts no borrar fin -->
+ 
+
+    </body>
+</html>

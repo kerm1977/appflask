@@ -1,0 +1,47 @@
+
+{% extends "base.html" %}
+{% block content %}
+<!-- Titulo -->
+    <div class="container">
+        {%if vtitulo%}
+            <h1> Flask - {{vtitulo}} </h1>
+        {%else%}
+            <h1>Titulo si no lo encuentra</h1>
+        {%endif%}
+    </div>
+
+<!-- Formulario login -->
+    <div class="container">
+        <div class="frame">
+            <div class="nav">
+                <ul class="links">
+                    <li class=" uli signin-inactive">ESTÁS EN INICIO</a></li>
+                    <li class=" uli signup-active"><a class="btn" href="{{ url_for('registro')}}">Registrarme</a></li>
+                </ul>
+            </div>
+            
+    <div ng-app ng-init="checked = false">
+        <!-- LOGIN -->
+
+        {{form.hidden_tag()}}
+
+        <form class="form-signin" action="" method="POST" name="form">
+            <label for="email">Email</label>
+            <!-- <input type="text" class="form-styling" name="email"> -->
+            {{form.email(class="form-styling")}}    
+            
+            <label for="password">Contraseña</label>
+            <!-- <input type="text" class="form-styling" name="password">  -->
+            {{form.password(class="form-styling")}}  
+
+            <input type="checkbox" id="checkbox"/>
+
+            <label for="checkbox" name="checkbox"><span class="ui"></span>Recordarme</label>
+      
+            <div class="uli signin-active text-center">
+
+            <button type="submit" class="btn-signup" name="Ingresar">Ingresar</button>
+        </form>
+    </div>
+
+{% endblock %}
