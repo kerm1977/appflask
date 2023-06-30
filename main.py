@@ -6,8 +6,10 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, HiddenField, EmailField
-from wtforms.validators import DataRequired, Length, Email,  EqualTo
+from wtforms.validators import DataRequired, Length, Email,  EqualTo, ValidationError
 from flask_bcrypt import Bcrypt
+
+
 
 app = Flask(__name__) 	
 #**********************************************************************************************
@@ -48,7 +50,17 @@ class formularioRegistro(FlaskForm):
 	password 			= 	PasswordField	('password',validators=[DataRequired(), Length(min=8, max=20)]) 
 	confirmpassword 	= 	PasswordField	('confirmpassword',validators=[DataRequired(), EqualTo('password', message='Password No Coincide')], id="confirm")
 	submit 				= 	SubmitField		('Registrarme')
+
+	def validate_username(self, username):
+		user = User.query.filter_by(username.username.data).first()
+		if user:
+			flash("El usuario ya fue tomado. Use otro ")
 			
+	def validate_email(self, email):
+		user = User.query.filter_by(email.email.data).first()
+		if user:
+			flash("El email ya fue tomado. Use otro ")
+
 class formularioLogin(FlaskForm):
  # CAMPOS EN DB			   TIPO DE DATO		NOMBRE DE CAMPO EN HTML Y VALIDACIONES
 	email 				= 	StringField		('email', validators=[DataRequired(), Email()])
@@ -118,21 +130,16 @@ def login():
 @app.route("/registro", methods=["GET","POST"]) 
 def registro():
 	titulo="Registro"
-	import sqlite3
-	conexion = sqlite3.connect('db.db')
-	cursor = conexion.cursor()
 	form = formularioRegistro()
 
 	if request.method == "POST":
-	# Error de comparación de las contraseñas
-		if {form.password.data} != {form.confirmpassword.data}:
+		username = User.query.filter_by(username=request.form["username"].lower()).first()
+		email = User.query.filter_by(email=request.form["email"].lower()).first()
+		if username or email:
+			flash("Email o Usuario ya existen intente con otro", "warning")
+		elif {form.password.data} != {form.confirmpassword.data}:
 			flash(f"La contraseña y la verificación NO son iguales", "danger")
-			# return redirect(url_for("registro")) <--Vuelve a la página de registro pero borra todo el formulario
-		
-		elif cursor.execute("SELECT username FROM user") == {form.username.data} and cursor.execute("SELECT email FROM user") == {form.email.data}:
-			flash(usuarios = cursor.fetchall())
-			conexion.close()
-			
+			return redirect(url_for("registro"))
 		else:
 			hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')	
 			user = User(username=form.username.data, email=form.email.data, password=hashed_password, confirmpassword=hashed_password)
@@ -140,7 +147,6 @@ def registro():
 			db.session.commit()
 			flash(f"Cuenta creada por {form.username.data}", "success")
 			return redirect(url_for("login"))
-
 	return render_template("registro.html", vtitulo=titulo, form=form)
 #**********************************************************************************************
 #**********************************************************************************************
