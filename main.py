@@ -8,6 +8,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, HiddenField, EmailField
 from wtforms.validators import DataRequired, Length, Email,  EqualTo, ValidationError
 from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, UserMixin, login_user
 
 
 
@@ -31,6 +32,7 @@ db = SQLAlchemy(app)
 app.app_context().push()
 bcrypt = Bcrypt(app)
 app.config['SECRET_KEY'] = '0b254d802b768739f4a9c07dc2be6efa849524cb3a371a50f28a80f469abfba9'
+login_manager = LoginManager(app)
 #**********************************************************************************************
 #**********************************************************************************************
 
@@ -40,6 +42,9 @@ app.config['SECRET_KEY'] = '0b254d802b768739f4a9c07dc2be6efa849524cb3a371a50f28a
 
 
 
+@login_manager.user_loader
+def load_user(user_id):
+	return User.query.get(int(user_id))
 
 #FORMULARIO TABLAS LOGIN Y DE REGISTRO ********************************************************
 #**********************************************************************************************
@@ -125,7 +130,14 @@ def login():
 	titulo="Login"
 	form = formularioLogin()
 
+	if request.method == "POST":
+		user = User.query.filter_by(email=form.email.data).first()
+		if user and bcrypt.check_password_hash(user.password, form.password.data):
+			flash(f"Hola {user.username}", "alert-primary")
+			return redirect("home")
+		flash("Contraseña o Usuario invalidos", "danger")
 	return render_template("login.html", vtitulo=titulo, form=form)
+
 
 @app.route("/registro", methods=["GET","POST"]) 
 def registro():
@@ -135,11 +147,10 @@ def registro():
 	if request.method == "POST":
 		username = User.query.filter_by(username=request.form["username"].lower()).first()
 		email = User.query.filter_by(email=request.form["email"].lower()).first()
-		if username or email:
-			flash("Email o Usuario ya existen intente con otro", "warning")
-		elif {form.password.data} != {form.confirmpassword.data}:
+		if {form.password.data} != {form.confirmpassword.data}:
 			flash(f"La contraseña y la verificación NO son iguales", "danger")
-			return redirect(url_for("registro"))
+		elif username or email:
+			flash("Email o Usuario ya existen intente con otro", "warning")
 		else:
 			hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')	
 			user = User(username=form.username.data, email=form.email.data, password=hashed_password, confirmpassword=hashed_password)
