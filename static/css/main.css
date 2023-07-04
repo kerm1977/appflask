@@ -6,16 +6,11 @@
 @import url('Animate.css');
 @import url('refresh.css');
 @import url('all.css');
-@import url('show_pass.css');
 @import url('flexbox.css');
 @import url('login.css');
 @import url('navbar.css');
 @import url('fontawesome.css');
-@import url('duotone.css');
-@import url('brands.css');
-@import url('light.css');
-@import url('regular.css');
-@import url('solid.css');
+
 
 
 /*Estilos del botón para subir*/
@@ -34,8 +29,8 @@
 /*Para que la fuente tiene que tener el formato .ttf dentro de la carpeta fonts
  y para que funcione hay que declarar la ruta en src y llamarlo desde cualquier
  otra hoja de estilos por medio de font-family y el nombre de la misma*/
-@font-face {
+/*@font-face {
   font-family: "OpenSans-Light.ttf";
   src: url("../fonts/OpenSans-Light.ttf");
-}
+}*/
 

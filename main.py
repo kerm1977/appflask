@@ -1,18 +1,27 @@
 # IMPORTS  ************************************************************************************
 #**********************************************************************************************
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy #SQLITE3
+from flask_mysqldb import MySQL #MySQL
 from flask import request, make_response, redirect, render_template, url_for, flash
 from datetime import datetime
-from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, HiddenField, EmailField
 from wtforms.validators import DataRequired, Length, Email,  EqualTo, ValidationError
-from flask_bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt #Encriptado aleatorio para contraseñas
 from flask_login import LoginManager, UserMixin, login_user
+#**********************************************************************************************
+#**********************************************************************************************
 
 
 
-app = Flask(__name__) 	
+
+
+
+
+
+#INSTANCIA DE FLASK ***************************************************************************
+app = Flask(__name__) 
 #**********************************************************************************************
 #**********************************************************************************************
 
@@ -32,19 +41,22 @@ db = SQLAlchemy(app)
 app.app_context().push()
 bcrypt = Bcrypt(app)
 app.config['SECRET_KEY'] = '0b254d802b768739f4a9c07dc2be6efa849524cb3a371a50f28a80f469abfba9'
-login_manager = LoginManager(app)
+#**********************************************************************************************
+#**********************************************************************************************
+
+#DATABASE MYSQL********************************************************************************
+#**********************************************************************************************
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'flask'
+mysql = MySQL(app)
 #**********************************************************************************************
 #**********************************************************************************************
 
 
 
 
-
-
-
-@login_manager.user_loader
-def load_user(user_id):
-	return User.query.get(int(user_id))
 
 #FORMULARIO TABLAS LOGIN Y DE REGISTRO ********************************************************
 #**********************************************************************************************
